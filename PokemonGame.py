@@ -37,10 +37,8 @@ class World:
         self.generate_pokemons()
 
     def _get_pos(self):
-        l = 25
-        w = 5
-        i = randint(0, l)
-        x, y = (i % w * cell_size + cell_size, i // w * cell_size + upper_padding)
+        i = randint(0, gridsize * gridsize - 1)
+        x, y = (i % gridsize * cell_size + cell_size, i // gridsize * cell_size + upper_padding)
 
         for p in pokemons:
             if p.pos == (x, y):
@@ -60,20 +58,18 @@ class World:
             return ElectricPokemon("E", randint(5, 50), randint(5, 50), pos)
 
     def generate_pokemons(self):
-        l = 25
-        w = 5
-        _poss = [i for i in range(l)]
+        _poss = [i for i in range(gridsize * gridsize - 1)]
         iposs = []
 
         for i in range(self.amount):
-            k = l - i - 1
+            k = gridsize * gridsize - i - 1 - 1
             j = randint(0, k)
             iposs.append(_poss[j])
             _poss.pop(j)
 
         poss = []
         for i in iposs:
-            poss.append((i % w * cell_size + cell_size, i // w * cell_size + upper_padding))
+            poss.append((i % gridsize * cell_size + cell_size, i // gridsize * cell_size + upper_padding))
 
         for i in range(self.amount):
             self._generate_pokemon(poss[i])

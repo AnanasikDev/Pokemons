@@ -25,12 +25,17 @@ trainers = []
 pygame.init()
 
 cell_size = 200
-upper_padding = 100
+upper_padding = 50
+
+pokesize = 175
+gridsize = 4
 
 backgroundColor = (150, 150, 150)
 contentColor = (5, 5, 5)
-screenSize = (1200, cell_size * 5 + upper_padding)
-contentBorder = ((100, 1100), (100, 700))
+screenSize = (1000, cell_size * gridsize + upper_padding)
+
+margin = 0.8
+contentBorder = (screenSize[0] * (1 - margin), screenSize[0] * margin, screenSize[1] * (1 - margin), screenSize[1] * margin)
 
 screen = pygame.display.set_mode(screenSize)
 screen.fill(backgroundColor)

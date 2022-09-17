@@ -1,42 +1,15 @@
 from Render import *
 
 
-class Pokemon:
-    def __init__(self, name, atk, df):
+class Pokemon(pygame.sprite.Sprite):
+    def __init__(self, name, atk, df, pos):
+        super().__init__()
         self.name = name
         self.hp = 100
         self.atk = atk
         self.df = df
-
-    def attack(self, enemy):
-        if self.hp <= 0 or enemy.hp <= 0:
-            return
-
-        damage = self.atk - enemy.df
-        if damage <= 0:
-            damage = 1
-        enemy.hp -= damage
-        if enemy.hp < 0:
-            enemy.hp = 0
-
-    def get_name(self):
-        return self.name
-
-    def get_hp(self):
-        return self.hp
-
-    def get_atk(self):
-        return self.atk
-
-    def get_def(self):
-        return self.df
-
-
-class VPokemon(Pokemon):
-    def __init__(self, name, atk, df, pos):
-        super().__init__(name, atk, df)
         self.pos = pos
-        self.size = (175, 175)
+        self.size = (pokesize, pokesize)
         print(f"Poke spawned on {self.pos}")
         self.text_local_pos = (0, -32)
         self.hp_local_pos = (0, -18)
@@ -62,8 +35,31 @@ class VPokemon(Pokemon):
         objects.remove(self)
         pygame.draw.rect(screen, backgroundColor, (self.pos[0], self.pos[1], self.size[0], self.size[1]))
 
+    def attack(self, enemy):
+        if self.hp <= 0 or enemy.hp <= 0:
+            return
 
-class WaterPokemon(VPokemon):
+        damage = self.atk - enemy.df
+        if damage <= 0:
+            damage = 1
+        enemy.hp -= damage
+        if enemy.hp < 0:
+            enemy.hp = 0
+
+    def get_name(self):
+        return self.name
+
+    def get_hp(self):
+        return self.hp
+
+    def get_atk(self):
+        return self.atk
+
+    def get_def(self):
+        return self.df
+
+
+class WaterPokemon(Pokemon):
     def __init__(self, name, atk, df, pos):
         self.import_image("images/poke2.png")
         super().__init__(name, atk, df, pos)
@@ -84,13 +80,13 @@ class WaterPokemon(VPokemon):
             enemy.hp = 0
 
 
-class FirePokemon(VPokemon):
+class FirePokemon(Pokemon):
     def __init__(self, name, atk, df, pos):
         self.import_image("images/poke3.png")
         super().__init__(name, atk, df, pos)
 
 
-class GrassPokemon(VPokemon):
+class GrassPokemon(Pokemon):
     def __init__(self, name, atk, df, pos):
         self.import_image("images/poke4.png")
         super().__init__(name, atk, df, pos)
@@ -111,7 +107,7 @@ class GrassPokemon(VPokemon):
             enemy.hp = 0
 
 
-class ElectricPokemon(VPokemon):
+class ElectricPokemon(Pokemon):
     def __init__(self, name, atk, df, pos):
         self.import_image("images/poke1.png")
         super().__init__(name, atk, df, pos)
