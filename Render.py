@@ -4,6 +4,7 @@ import pygame
 def pre_update():
     screen.fill(backgroundColor)
 
+
 def update():
     pygame.display.flip()
 
@@ -18,11 +19,19 @@ def drawText(surface, color, text, where, font_name="Arial", font_size=16):
         text_rect.topleft = where
     surface.blit(text_surface, text_rect)
 
-objects = []
+
+def clear_pokemons():
+    global pokemons
+    pokemons.clear()
+
+
 pokemons = []
+objects = []
 trainers = []
 
 pygame.init()
+
+FPS = 60
 
 cell_size = 200
 upper_padding = 50
@@ -40,3 +49,6 @@ contentBorder = (screenSize[0] * (1 - margin), screenSize[0] * margin, screenSiz
 screen = pygame.display.set_mode(screenSize)
 screen.fill(backgroundColor)
 pygame.display.set_caption("Pokemons")
+
+timer = pygame.time.Clock()
+

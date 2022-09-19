@@ -1,24 +1,42 @@
 from Render import *
+from pygame import sprite
+from time import time
 
 
-class Pokemon(pygame.sprite.Sprite):
+class Pokemon(sprite.Sprite):
+
+    size = (pokesize, pokesize)
+
     def __init__(self, name, atk, df, pos):
+        global pokemons
         super().__init__()
         self.name = name
         self.hp = 100
         self.atk = atk
         self.df = df
         self.pos = pos
-        self.size = (pokesize, pokesize)
         print(f"Poke spawned on {self.pos}")
-        self.text_local_pos = (0, -32)
-        self.hp_local_pos = (0, -18)
+        self.text_local_pos = (0, -28)
+        self.hp_local_pos = (0, -14)
         self.scoreText = f"{self.name} {self.atk} {self.df}"
-        objects.append(self)
+        # objects.append(self)
         pokemons.append(self)
+        print(str(time()) +  " Added", pokemons)
+
+        self.init_sprite()
+
+    def init_sprite(self):
+        self.image = self.image_origin
+        self.rect = self.image.get_rect()
+
+    def set_position(self, pos):
+        self.pos = pos
 
     def import_image(self, path):
-        self.image = pygame.image.load(path).convert_alpha()
+        self.image_origin = pygame.image.load(path).convert_alpha()
+
+    def scale_image(self, scale):
+        self.image = pygame.transform.scale(self.image_origin, (int(self.size[0] * scale), int(self.size[1] * scale)))
 
     def render(self):
         screen.blit(self.image, self.pos)
@@ -26,14 +44,17 @@ class Pokemon(pygame.sprite.Sprite):
         drawText(screen, contentColor, self.scoreText, [self.pos[0] + self.text_local_pos[0], self.pos[1] + self.text_local_pos[1]])
         drawText(screen, contentColor, str(self.hp), [self.pos[0] + self.hp_local_pos[0], self.pos[1] + self.hp_local_pos[1]])
 
+    def translate(self, deltax, deltay):
+        self.pos = (self.pos[0] + deltax, self.pos[1] + deltay)
+
     def overlap(self, x, y):
         return self.pos[0] <= x <= self.pos[0] + self.size[0] and \
                self.pos[1] <= y <= self.pos[1] + self.size[1]
 
     def destroy(self):
         pokemons.remove(self)
-        objects.remove(self)
-        pygame.draw.rect(screen, backgroundColor, (self.pos[0], self.pos[1], self.size[0], self.size[1]))
+        print("remove")
+        # objects.remove(self)
 
     def attack(self, enemy):
         if self.hp <= 0 or enemy.hp <= 0:
