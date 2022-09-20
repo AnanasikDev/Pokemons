@@ -15,10 +15,18 @@ class Trainer(pygame.sprite.Sprite):
         self.wins = 0
         self.pos = pos
         self.name = name
-        self.scoreText = f"Trainer {self.name} [{len(self.box)}]"
-        self.text_local_pos = (0, -18)
+        self.update_title()
+        self.update_wins()
+        self.title_local_pos = (0, -16)
+        self.wins_local_pos = (0, -36)
         # objects.append(self)
         trainers.append(self)
+
+    def update_title(self):
+        self.title_text = f"{self.name} owns {len(self.box)} p"
+
+    def update_wins(self):
+        self.wins_text = f"Wins {self.wins}"
 
     def add(self, pokemon):
         self.box.append(pokemon)
@@ -35,6 +43,8 @@ class Trainer(pygame.sprite.Sprite):
         self.pos = pos
 
     def render(self):
-        self.scoreText = f"Trainer {self.name} [{len(self.box)}]"
+        self.update_title()
+        self.update_wins()
         screen.blit(self.image, self.pos)
-        drawText(screen, contentColor, self.scoreText, [self.pos[0] + self.text_local_pos[0], self.pos[1] + self.text_local_pos[1]])
+        drawText(screen, contentColor, self.title_text, [self.pos[0] + self.title_local_pos[0], self.pos[1] + self.title_local_pos[1]])
+        drawText(screen, contentColor, self.wins_text, [self.pos[0] + self.wins_local_pos[0], self.pos[1] + self.wins_local_pos[1]], font_size=20)

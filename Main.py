@@ -1,7 +1,3 @@
-from Pokemons import *
-from random import randint
-from Render import *
-
 from World import *
 from Battle import *
 from Trainer import *
