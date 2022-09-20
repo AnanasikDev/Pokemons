@@ -1,6 +1,7 @@
 from Render import *
 from Pokemons import *
 from Trainer import *
+from SmartTrainer import *
 
 
 class Battle:
@@ -11,7 +12,7 @@ class Battle:
         self.effects = effects
 
         self.trainer1 = Trainer((50, 50), "Player")
-        self.trainer2 = Trainer((50, screenSize[1] - 450), "Enemy")
+        self.trainer2 = SmartTrainer((50, screenSize[1] - 450), "Enemy")
 
         self.trainers = [self.trainer1, self.trainer2]
         self.poke = 5
@@ -59,8 +60,8 @@ class Battle:
         if len(self.trainer2.active_box) == 0:
             return
 
-        enemy = select_random(self.trainer2.active_box)
-        ally = select_random(self.trainer1.active_box)
+        enemy = self.trainer2.choose_attacker()
+        ally = self.trainer2.choose_target(self.trainer1)
 
         enemy.attack(ally)
         self.effects.add(Effect(self.draw_attack, [ally, enemy, (200, 10, 10)]), 0.8)

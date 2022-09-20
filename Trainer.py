@@ -34,6 +34,18 @@ class Trainer(pygame.sprite.Sprite):
     def add2active(self, pokemon):
         self.active_box.append(pokemon)
 
+    def choose_attacker(self):
+        return select_random(self.active_box)
+
+    def choose_defencer(self, defencers):
+        return select_random(defencers)
+
+    def choose_target(self, enemy):
+        return select_random(enemy.active_box)
+
+    def pick_pokemon(self, poks):
+        return select_random(poks)
+
     def best_team(self, n):
         b = self.box[0:n]
         self.box = self.box[n:]

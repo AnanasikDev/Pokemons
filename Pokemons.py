@@ -26,6 +26,9 @@ class Pokemon(sprite.Sprite):
         self.init_sprite()
         self.calculate_center()
 
+        self.value = self.atk * self.df
+        self.targety = self.value * 1.0 / self.hp
+
     def calculate_center(self):
         # self.center = self.image.get_rect().center
         width, height = self.image.get_rect().size
@@ -97,6 +100,7 @@ class WaterPokemon(Pokemon):
     def __init__(self, name, atk, df, pos):
         self.import_image("images/poke2.png")
         super().__init__(name, atk, df, pos)
+        self.value = self.atk * self.df * 1.15
 
     def attack(self, enemy):
         if self.hp <= 0 or enemy.hp <= 0:
@@ -118,12 +122,14 @@ class FirePokemon(Pokemon):
     def __init__(self, name, atk, df, pos):
         self.import_image("images/poke3.png")
         super().__init__(name, atk, df, pos)
+        self.value = self.atk * self.df * 0.75
 
 
 class GrassPokemon(Pokemon):
     def __init__(self, name, atk, df, pos):
         self.import_image("images/poke4.png")
         super().__init__(name, atk, df, pos)
+        self.value = self.atk * self.df * 1.1
 
     def attack(self, enemy):
         if self.hp <= 0 or enemy.hp <= 0:
