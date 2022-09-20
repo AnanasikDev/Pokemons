@@ -37,15 +37,21 @@ class Battle:
         self.world.generate_pokemons()
         self.effects.clear()
 
-    def draw_attack(self, attacker, defencer, color, width = 5):
-        pygame.draw.line(screen, color, attacker.center, defencer.center, width)
+    def draw_attack(self, a, b, color, width = 5):
+        pygame.draw.line(screen, color, a, b, width)
 
     def assault(self):
         if self.selected_ally is None or self.selected_enemy is None:
             return False
 
         self.selected_ally.attack(self.selected_enemy)
-        self.effects.add(Effect(self.draw_attack, [self.selected_ally, self.selected_enemy, (20, 240, 35), 7]), 0.8)
+        # self.effects.add(Effect(self.draw_attack, [self.selected_ally, self.selected_enemy, (20, 240, 35), 7]), 0.8)
+        vector = (self.selected_enemy.center[0] - self.selected_ally.center[0], self.selected_enemy.center[1] - self.selected_ally.center[1])
+
+        a = (self.selected_ally.center[0] + vector[0] * 0.1, self.selected_ally.center[1] + vector[1] * 0.1)
+        b = (self.selected_enemy.center[0] - vector[0] * 0.1, self.selected_enemy.center[1] - vector[1] * 0.1)
+
+        self.effects.add(Effect(self.draw_attack, [a, b, (20, 240, 35), 7]), 0.8)
 
         if self.selected_enemy.hp <= 0:
             self.trainer2.active_box.remove(self.selected_enemy)
@@ -64,7 +70,15 @@ class Battle:
         ally = self.trainer2.choose_target(self.trainer1)
 
         enemy.attack(ally)
-        self.effects.add(Effect(self.draw_attack, [ally, enemy, (200, 10, 10)]), 0.8)
+        # self.effects.add(Effect(self.draw_attack, [ally, enemy, (200, 10, 10)]), 0.8)
+
+        vector = (enemy.center[0] - ally.center[0],
+                  enemy.center[1] - ally.center[1])
+
+        a = (ally.center[0] + vector[0] * 0.1, ally.center[1] + vector[1] * 0.1)
+        b = (enemy.center[0] - vector[0] * 0.1, enemy.center[1] - vector[1] * 0.1)
+
+        self.effects.add(Effect(self.draw_attack, [a, b, (200, 10, 10)]), 0.8)
 
         if ally.hp <= 0:
             self.trainer1.active_box.remove(ally)

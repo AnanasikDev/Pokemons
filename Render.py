@@ -41,7 +41,7 @@ upper_padding = 80
 pokesize = 175
 gridsize = 4
 
-backgroundColor = (150, 150, 150)
+backgroundColor = (150, 151, 155)
 contentColor = (5, 5, 5)
 screenSize = (1000, cell_size * gridsize + upper_padding)
 

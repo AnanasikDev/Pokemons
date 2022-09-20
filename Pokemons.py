@@ -17,10 +17,8 @@ class Pokemon(sprite.Sprite):
         self.pos = pos
         self.text_local_pos = (0, -4)
         self.hp_local_pos = (0, -14)
-        self.scoreText = f"atk: {self.atk} | def: {self.df}"
         self.id = Pokemon.id + 1
         Pokemon.id += 1
-        # objects.append(self)
         pokemons.append(self)
 
         self.init_sprite()
@@ -51,21 +49,31 @@ class Pokemon(sprite.Sprite):
     def scale_image(self, scale):
         self.image = pygame.transform.scale(self.image_origin, (int(self.size[0] * scale), int(self.size[1] * scale)))
 
+    def render_bars(self, image_size):
+        bgc = (backgroundColor[0] + 12, backgroundColor[1] + 13, backgroundColor[2] + 14)
+
+        hp = (self.hp + 1) / 100
+        hp_bar_color = (250 - hp * 200, hp * 180, 15)
+        pygame.draw.rect(screen, bgc, (self.pos[0], self.pos[1] + self.hp_local_pos[1], image_size[0], 12))
+        pygame.draw.rect(screen, hp_bar_color, (self.pos[0], self.pos[1] + self.hp_local_pos[1], image_size[0] * self.hp / 100, 12))
+
+        df = self.df / 15
+        pygame.draw.rect(screen, bgc, (self.pos[0], self.pos[1] + self.hp_local_pos[1] + 14, image_size[0] / 2, 8))
+        pygame.draw.rect(screen, (80, 90, 140), (self.pos[0], self.pos[1] + self.hp_local_pos[1] + 14, image_size[0] / 2 * df, 8))
+
+        atk = self.atk / 60
+        pygame.draw.rect(screen, bgc, (self.pos[0] + image_size[0] / 2, self.pos[1] + self.hp_local_pos[1] + 14, image_size[0] / 2, 8))
+        pygame.draw.rect(screen, (125, 5, 5), (self.pos[0] + image_size[0] / 2, self.pos[1] + self.hp_local_pos[1] + 14, image_size[0] / 2 * atk, 8))
+
     def render(self):
         image_size = self.image.get_rect().size
         pygame.draw.rect(screen, backgroundColor, (self.pos[0], self.pos[1] + self.text_local_pos[1], 64, 32))
-
-        # pygame.draw.rect(screen, (250, 40, 40), (self.pos[0], self.pos[1], image_size[0], image_size[1]))
-
-        hp = (self.hp + 1) / 100
-        bar_color = (250 - hp * 200, hp * 180, 15)
-
-        pygame.draw.rect(screen, bar_color, (self.pos[0], self.pos[1] + self.hp_local_pos[1], image_size[0] * self.hp / 100, 12))
-
         screen.blit(self.image, self.pos)
+        self.render_bars(image_size)
         self.update_targety()
-        drawText(screen, contentColor, self.scoreText, [self.pos[0] + self.text_local_pos[0], self.pos[1] + self.text_local_pos[1]], font_size=14)
-        drawText(screen, contentColor, str(self.hp), [self.pos[0] + self.hp_local_pos[0], self.pos[1] + self.hp_local_pos[1]], font_size=14)
+
+        # drawText(screen, contentColor, f"{self.atk} {self.df}", [self.pos[0] + self.text_local_pos[0], self.pos[1] + self.text_local_pos[1]], font_size=14)
+        # drawText(screen, contentColor, str(self.hp), [self.pos[0] + self.hp_local_pos[0], self.pos[1] + self.hp_local_pos[1]], font_size=14)
 
     def translate(self, deltax, deltay):
         self.pos = (self.pos[0] + deltax, self.pos[1] + deltay)

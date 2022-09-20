@@ -1,6 +1,5 @@
 from Trainer import *
-from Render import *
-
+from random import uniform
 
 class SmartTrainer(Trainer):
     def __init__(self, pos, name):
@@ -17,7 +16,7 @@ class SmartTrainer(Trainer):
     def choose_target(self, player):
         values = []
         for p in player.active_box:
-            values.append(p.targety)
+            values.append(p.targety * uniform(0.9, 1.1))
         print("VALUES ", values)
         defencer = player.active_box[values.index(max(values))]
 
