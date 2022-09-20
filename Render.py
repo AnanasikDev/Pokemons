@@ -78,7 +78,8 @@ class Effects:
 
     def shoot(self, effect, time):
         sleep(time)
-        self.remove(effect)
+        if effect in self.effects:
+            self.remove(effect)
 
     def remove(self, effect):
         self.effects.remove(effect)
