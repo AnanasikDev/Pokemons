@@ -15,9 +15,9 @@ class Pokemon(sprite.Sprite):
         self.atk = atk
         self.df = df
         self.pos = pos
-        self.text_local_pos = (0, -28)
+        self.text_local_pos = (0, -4)
         self.hp_local_pos = (0, -14)
-        self.scoreText = f"{self.name} {self.atk} {self.df}"
+        self.scoreText = f"atk: {self.atk} | def: {self.df}"
         self.id = Pokemon.id + 1
         Pokemon.id += 1
         # objects.append(self)
@@ -27,7 +27,10 @@ class Pokemon(sprite.Sprite):
         self.calculate_center()
 
         self.value = self.atk * self.df
-        self.targety = self.value * 1.0 / self.hp
+        self.update_targety()
+
+    def update_targety(self):
+        self.targety = self.value / (self.hp + 0.1)
 
     def calculate_center(self):
         # self.center = self.image.get_rect().center
@@ -54,9 +57,15 @@ class Pokemon(sprite.Sprite):
 
         # pygame.draw.rect(screen, (250, 40, 40), (self.pos[0], self.pos[1], image_size[0], image_size[1]))
 
+        hp = (self.hp + 1) / 100
+        bar_color = (250 - hp * 200, hp * 180, 15)
+
+        pygame.draw.rect(screen, bar_color, (self.pos[0], self.pos[1] + self.hp_local_pos[1], image_size[0] * self.hp / 100, 12))
+
         screen.blit(self.image, self.pos)
-        drawText(screen, contentColor, self.scoreText, [self.pos[0] + self.text_local_pos[0], self.pos[1] + self.text_local_pos[1]])
-        drawText(screen, contentColor, str(self.hp), [self.pos[0] + self.hp_local_pos[0], self.pos[1] + self.hp_local_pos[1]])
+        self.update_targety()
+        drawText(screen, contentColor, self.scoreText, [self.pos[0] + self.text_local_pos[0], self.pos[1] + self.text_local_pos[1]], font_size=14)
+        drawText(screen, contentColor, str(self.hp), [self.pos[0] + self.hp_local_pos[0], self.pos[1] + self.hp_local_pos[1]], font_size=14)
 
     def translate(self, deltax, deltay):
         self.pos = (self.pos[0] + deltax, self.pos[1] + deltay)
@@ -79,6 +88,8 @@ class Pokemon(sprite.Sprite):
         enemy.hp -= damage
         if enemy.hp < 0:
             enemy.hp = 0
+
+        enemy.update_targety()
 
     def get_name(self):
         return self.name

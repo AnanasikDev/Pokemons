@@ -14,11 +14,12 @@ class SmartTrainer(Trainer):
 
         return attacker
 
-    def choose_defencer(self, defencers):
+    def choose_target(self, player):
         values = []
-        for p in defencers:
+        for p in player.active_box:
             values.append(p.targety)
-        defencer = self.active_box[values.index(max(values))]
+        print("VALUES ", values)
+        defencer = player.active_box[values.index(max(values))]
 
         return defencer
 

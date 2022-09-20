@@ -37,9 +37,6 @@ class Trainer(pygame.sprite.Sprite):
     def choose_attacker(self):
         return select_random(self.active_box)
 
-    def choose_defencer(self, defencers):
-        return select_random(defencers)
-
     def choose_target(self, enemy):
         return select_random(enemy.active_box)
 
