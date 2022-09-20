@@ -1,5 +1,7 @@
 import pygame
-
+from random import randint
+import threading
+from time import sleep
 
 def pre_update():
     screen.fill(backgroundColor)
@@ -34,7 +36,7 @@ pygame.init()
 FPS = 60
 
 cell_size = 200
-upper_padding = 50
+upper_padding = 80
 
 pokesize = 175
 gridsize = 4
@@ -52,3 +54,40 @@ pygame.display.set_caption("Pokemons")
 
 timer = pygame.time.Clock()
 
+
+def select_random(collection):
+    return collection[randint(0, len(collection) - 1)]
+
+
+class Effects:
+    def __init__(self):
+        self.effects = []
+
+    def clear(self):
+        self.effects.clear()
+
+    def render_all(self):
+        for effect in self.effects:
+            effect.render()
+
+    def add(self, effect, seconds = 0):
+        self.effects.append(effect)
+        if seconds > 0:
+            t = threading.Thread(target=self.shoot, args=(effect, seconds))
+            t.start()
+
+    def shoot(self, effect, time):
+        sleep(time)
+        self.remove(effect)
+
+    def remove(self, effect):
+        self.effects.remove(effect)
+
+
+class Effect:
+    def __init__(self, function, args):
+        self.function = function
+        self.args = args
+
+    def render(self):
+        self.function(*self.args)

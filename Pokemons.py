@@ -6,24 +6,30 @@ from time import time
 class Pokemon(sprite.Sprite):
 
     size = (pokesize, pokesize)
+    id = 0
 
     def __init__(self, name, atk, df, pos):
-        global pokemons
         super().__init__()
         self.name = name
         self.hp = 100
         self.atk = atk
         self.df = df
         self.pos = pos
-        print(f"Poke spawned on {self.pos}")
         self.text_local_pos = (0, -28)
         self.hp_local_pos = (0, -14)
         self.scoreText = f"{self.name} {self.atk} {self.df}"
+        self.id = Pokemon.id + 1
+        Pokemon.id += 1
         # objects.append(self)
         pokemons.append(self)
-        print(str(time()) +  " Added", pokemons)
 
         self.init_sprite()
+        self.calculate_center()
+
+    def calculate_center(self):
+        # self.center = self.image.get_rect().center
+        width, height = self.image.get_rect().size
+        self.center = (self.pos[0] + width // 2, self.pos[1] + height // 2)
 
     def init_sprite(self):
         self.image = self.image_origin
@@ -31,6 +37,7 @@ class Pokemon(sprite.Sprite):
 
     def set_position(self, pos):
         self.pos = pos
+        self.calculate_center()
 
     def import_image(self, path):
         self.image_origin = pygame.image.load(path).convert_alpha()
@@ -39,8 +46,12 @@ class Pokemon(sprite.Sprite):
         self.image = pygame.transform.scale(self.image_origin, (int(self.size[0] * scale), int(self.size[1] * scale)))
 
     def render(self):
-        screen.blit(self.image, self.pos)
+        image_size = self.image.get_rect().size
         pygame.draw.rect(screen, backgroundColor, (self.pos[0], self.pos[1] + self.text_local_pos[1], 64, 32))
+
+        # pygame.draw.rect(screen, (250, 40, 40), (self.pos[0], self.pos[1], image_size[0], image_size[1]))
+
+        screen.blit(self.image, self.pos)
         drawText(screen, contentColor, self.scoreText, [self.pos[0] + self.text_local_pos[0], self.pos[1] + self.text_local_pos[1]])
         drawText(screen, contentColor, str(self.hp), [self.pos[0] + self.hp_local_pos[0], self.pos[1] + self.hp_local_pos[1]])
 
@@ -53,7 +64,6 @@ class Pokemon(sprite.Sprite):
 
     def destroy(self):
         pokemons.remove(self)
-        print("remove")
         # objects.remove(self)
 
     def attack(self, enemy):
@@ -78,6 +88,9 @@ class Pokemon(sprite.Sprite):
 
     def get_def(self):
         return self.df
+
+    def __str__(self):
+        return f"Pokemon {self.id} with attack = {self.atk}; defence = {self.df}; hp = {self.hp}"
 
 
 class WaterPokemon(Pokemon):
