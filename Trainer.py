@@ -43,8 +43,8 @@ class Trainer(pygame.sprite.Sprite):
     def choose_target(self, enemy):
         return select_random(enemy.active_box)
 
-    def pick_pokemon(self, poks):
-        return select_random(poks)
+    def pick_pokemon(self, poks, world):
+        world.pick_pokemon(select_random(poks), self)
 
     def best_team(self, n):
         b = self.box[0:n]

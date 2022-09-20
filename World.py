@@ -52,9 +52,10 @@ class World:
         for i in range(self.amount):
             self._generate_pokemon(poss[i])
 
-    def catch_pokemon(self):
-        return pokemons[randint(0, len(pokemons))]
-
     def add_pokemon(self):
         x, y = self._get_pos()
         self._generate_pokemon((x, y))
+
+    def pick_pokemon(self, pokemon, trainer):
+        trainer.add(pokemon)
+        pokemon.destroy()

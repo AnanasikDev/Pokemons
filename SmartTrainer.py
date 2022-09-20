@@ -22,8 +22,9 @@ class SmartTrainer(Trainer):
 
         return defencer
 
-    def pick_pokemon(self, poks):
+    def pick_pokemon(self, poks, world):
         values = []
-        for p in self.active_box:
+        for p in poks:
             values.append(p.value)
-        return self.active_box[values.index(max(values))]
+
+        world.pick_pokemon(poks[values.index(max(values))], self)

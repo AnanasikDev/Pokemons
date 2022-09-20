@@ -43,15 +43,19 @@ while True:
                     else:  # pokemons picking mode
                         if mouse_presses[0]:
                             print("Left Mouse Key is being pressed [First trainer]")
-                            battle.trainer1.add(p)
-                            p.destroy()
+                            world.pick_pokemon(p, battle.trainer1)
+
+                            battle.trainer2.pick_pokemon(pokemons, world)
+                            world.add_pokemon()
                             world.add_pokemon()
 
+                        """
                         if mouse_presses[2]:
                             print("Right Mouse Key is being pressed [Second trainer]")
                             battle.trainer2.add(p)
                             p.destroy()
                             world.add_pokemon()
+                        """
 
             p.render()
 
